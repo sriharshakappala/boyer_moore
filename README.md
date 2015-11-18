@@ -22,8 +22,9 @@ Or install it yourself as:
 
 ## Usage
 
-`
+```ruby
 BoyerMoore.search("foobar", "bar")     # => 3
 BoyerMoore.search("foobar", "oof")     # => nil
 BoyerMoore.search("foobar", "foo")     # => 0
-`
+
+```
