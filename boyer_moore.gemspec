@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["sriharsha.kappala@hotmail.com"]
   spec.licenses      = ['MIT']
   spec.summary       = "Ruby wrapper for BoyerMoore algorithm - The fastest search strategy, ever!"
-  spec.description   = "Uses BoyerMorre algorithm for searching a pattern in word."
+  spec.description   = "Ruby wrapper for Boyer-Moore - The fastest search strategy, ever!"
   spec.homepage      = "https://github.com/sriharshakappala/boyer_moore"
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
