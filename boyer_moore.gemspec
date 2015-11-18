@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = BoyerMoore::VERSION
   spec.authors       = ["Sri Harsha Kappala"]
   spec.email         = ["sriharsha.kappala@hotmail.com"]
-
+  spec.licenses      = ['MIT']
   spec.summary       = "Ruby wrapper for BoyerMoore algorithm - The fastest search strategy, ever!"
   spec.description   = "Uses BoyerMorre algorithm for searching a pattern in word."
   spec.homepage      = "https://github.com/sriharshakappala/boyer_moore"
