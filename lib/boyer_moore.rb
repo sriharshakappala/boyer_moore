@@ -31,10 +31,10 @@ module BoyerMoore
     index = 0
     while index <= haystack.size - needle.size
       remaining = needle.size
-      while remaining > 0 && needle_matches?(needle[remaining-1], haystack[index+remaining-1])
+      while needle_matches?(needle[remaining-1], haystack[index+remaining-1])
         remaining -= 1
+        remaining == 0 and return index # SUCCESS!
       end
-      break index if remaining == 0
 
       k = badcharacter[haystack[index+remaining-1]] || -1
       skip =  if k < remaining && (m = remaining-k-1) > goodsuffix[remaining]
