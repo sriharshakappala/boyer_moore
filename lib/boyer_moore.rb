@@ -1,28 +1,28 @@
 require_relative "./boyer_moore/version"
 
-class RichHash
-  def initialize
-    @regexps = {}
-    @regular = {}
-  end
+module BoyerMoore
+  class RichHash
+    def initialize
+      @regexps = {}
+      @regular = {}
+    end
 
-  def [](k)
-    @regular[k] ||
-      @regexps.find do |regex,v|
-        regex.match(k) and break v
+    def [](k)
+      @regular[k] ||
+        @regexps.find do |regex,v|
+          regex.match(k) and break v
+        end
+    end
+
+    def []=(k,v)
+      if k.kind_of?(Regexp)
+        @regexps[k] = v
+      else
+        @regular[k] = v
       end
-  end
-
-  def []=(k,v)
-    if k.kind_of?(Regexp)
-      @regexps[k] = v
-    else
-      @regular[k] = v
     end
   end
-end
 
-module BoyerMoore
   def self.search(haystack, needle)
     needle_len = needle.size
     haystack_len = haystack.size

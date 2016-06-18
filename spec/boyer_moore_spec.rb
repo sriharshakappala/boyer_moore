@@ -75,15 +75,15 @@ describe BoyerMoore do
     end
   end
 
-  describe "richhash" do
+  describe BoyerMoore::RichHash do
     it "should allow regular hash semantics" do
-      h = RichHash.new
+      h = BoyerMoore::RichHash.new
       h[1] = "foo"
       expect(h[1]).to eq "foo"
     end
 
     it "should allow regexp semantics" do
-      h = RichHash.new
+      h = BoyerMoore::RichHash.new
       h["a"] = "b"
       h[/\d+/] = "bing"
       expect(h["a"]).to eq "b"
