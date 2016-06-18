@@ -1,28 +1,6 @@
 require_relative "./boyer_moore/version"
 
 module BoyerMoore
-  class RichHash
-    def initialize
-      @regexps = {}
-      @regular = {}
-    end
-
-    def [](k)
-      @regular[k] ||
-        @regexps.find do |regex,v|
-          regex.match(k) and break v
-        end
-    end
-
-    def []=(k,v)
-      if k.kind_of?(Regexp)
-        @regexps[k] = v
-      else
-        @regular[k] = v
-      end
-    end
-  end
-
   def self.search(haystack, needle)
     needle.size > 0 or raise "Must pass needle with size > 0"
     badcharacter = prepare_badcharacter_heuristic(needle)
@@ -31,7 +9,7 @@ module BoyerMoore
     index = 0
     while index <= haystack.size - needle.size
       remaining = needle.size
-      while needle_matches?(needle[remaining-1], haystack[index+remaining-1])
+      while needle[remaining-1] == haystack[index+remaining-1]
         remaining -= 1
         remaining == 0 and return index # SUCCESS!
       end
@@ -47,11 +25,10 @@ module BoyerMoore
   end
 
   def self.prepare_badcharacter_heuristic(str)
-    result = RichHash.new
-    (0...str.length).each do |i|
-      result[str[i]] = i
+    (0...str.length).reduce({}) do |hash, i|
+      hash[str[i]] = i
+      hash
     end
-    result
   end
 
   def self.prepare_goodsuffix_heuristic(normal)
@@ -68,14 +45,6 @@ module BoyerMoore
       result[j] = k if result[j] > k
     end
     result
-  end
-
-  def self.needle_matches?(needle, haystack)
-    if needle.kind_of?(Regexp)
-      needle.match(haystack)
-    else
-      needle == haystack
-    end
   end
 
   def self.compute_prefix(str)
