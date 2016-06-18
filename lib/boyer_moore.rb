@@ -34,18 +34,16 @@ module BoyerMoore
       while remaining > 0 && needle_matches?(needle[remaining-1], haystack[index+remaining-1])
         remaining -= 1
       end
-      if remaining <= 0
-        return index
-      else
-        k = badcharacter[haystack[index+remaining-1]] || -1
-        if k < remaining && (m = remaining-k-1) > goodsuffix[remaining]
-          index += m
-        else
-          index += goodsuffix[remaining]
-        end
-      end
+      break index if remaining == 0
+
+      k = badcharacter[haystack[index+remaining-1]] || -1
+      skip =  if k < remaining && (m = remaining-k-1) > goodsuffix[remaining]
+                m
+              else
+                goodsuffix[remaining]
+              end
+      index += skip
     end
-    nil
   end
 
   def self.prepare_badcharacter_heuristic(str)
