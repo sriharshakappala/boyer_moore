@@ -23,21 +23,20 @@ class RichHash
 end
 
 module BoyerMoore
-
   def self.search(haystack, needle)
     needle_len = needle.size
     haystack_len = haystack.size
     return nil if haystack_len == 0
     return haystack if needle_len == 0
-    badcharacter = self.prepare_badcharacter_heuristic(needle)
-    goodsuffix   = self.prepare_goodsuffix_heuristic(needle)
+    badcharacter = prepare_badcharacter_heuristic(needle)
+    goodsuffix   = prepare_goodsuffix_heuristic(needle)
     s = 0
     while s <= haystack_len - needle_len
       j = needle_len
-      while (j > 0) && self.needle_matches?(needle[j-1], haystack[s+j-1])
+      while (j > 0) && needle_matches?(needle[j-1], haystack[s+j-1])
         j -= 1
       end
-      if(j > 0)
+      if j > 0
         k = badcharacter[haystack[s+j-1]]
         k = -1 unless k
         if (k < j) && (m = j-k-1) > goodsuffix[j]
@@ -49,7 +48,7 @@ module BoyerMoore
         return s
       end
     end
-    return nil
+    nil
   end
 
   def self.prepare_badcharacter_heuristic(str)
@@ -62,10 +61,10 @@ module BoyerMoore
 
   def self.prepare_goodsuffix_heuristic(normal)
     size = normal.size
-    result = []
-    reversed = normal.dup.reverse
+    reversed = normal.reverse
     prefix_normal = compute_prefix(normal)
     prefix_reversed = compute_prefix(reversed)
+    result = []
     0.upto(size) do |i|
       result[i] = size - prefix_normal[size-1]
     end
@@ -79,7 +78,7 @@ module BoyerMoore
 
   def self.needle_matches?(needle, haystack)
     if needle.kind_of?(Regexp)
-      needle.match(haystack) ? true : false
+      needle.match(haystack)
     else
       needle == haystack
     end
@@ -93,10 +92,9 @@ module BoyerMoore
       while (k > 0) && (str[k] != str[q])
         k = result[k-1]
       end
-      k += 1 if(str[k] == str[q])
+      k += 1 if str[k] == str[q]
       result[q] = k
     end
     result
   end
-
 end
