@@ -27,22 +27,19 @@ describe BoyerMoore do
 
   it "should match ruby's #index for basic strings" do
     needle = 'abcab'
-    ['12abcabc', 'abcgghhhaabcabccccc', '123456789abc123abc', 'aabbcc'].each do |hay|
-      expect(BoyerMoore.search(hay, needle)).to eq hay.index(needle)
+    ['12abcabc', 'abcgghhhaabcabccccc', '123456789abc123abc', 'aabbcc'].each do |haystack|
+      expect(BoyerMoore.search(haystack, needle)).to eq haystack.index(needle)
     end
   end
   
   it "should match characters" do
-    needle = "abc".split(//)
-    haystacks = {
-      "abc" => 0, 
-      "bcd" => nil,
-      "efg" => nil, 
-      "my dog abc" => 7
-    }
-    haystacks.each do |hay,pos|
-      hay = hay.split(//)
-      expect(BoyerMoore.search(hay, needle)).to eq pos
+    {
+      ['a', 'b', 'c'] => 0,
+      ['b', 'c', 'd'] => nil,
+      ['e', 'f', 'g'] => nil,
+      ['m', 'y', ' ', 'd', 'o', 'g', ' ', 'a', 'b', 'c'] => 7
+    }.each do |haystack, position|
+      expect(BoyerMoore.search(haystack, ['a', 'b', 'c'])).to eq position
     end
   end
 
@@ -51,27 +48,24 @@ describe BoyerMoore do
   end
 
   it "should match words" do
-    needle = ["foo", "bar"]
-    haystacks = {
+    {
       ["foo", "bar", "baz"] => 0,
       ["bam", "bar", "bang"] => nil,
       ["put", "foo", "bar", "bar"] => 1,
       ["put", "foo", "bar", "foo", "bar"] => 1
-    }
-    haystacks.each do |hay,pos|
-      expect(BoyerMoore.search(hay, needle)).to eq pos
+    }.each do |haystack, position|
+      expect(BoyerMoore.search(haystack, ["foo", "bar"])).to eq position
     end
   end
 
   it "should match regular expressions" do
     needle = [/^\d+$/]
-    haystacks = {
+    {
       ["999"] => 0,
       ["foo", "99", "x"] => 1,
       ["foo99", "10", "10"] => 1
-    } 
-    haystacks.each do |hay,pos|
-      expect(BoyerMoore.search(hay, needle)).to eq pos
+    }.each do |haystack, position|
+      expect(BoyerMoore.search(haystack, needle)).to eq position
     end
   end
 
