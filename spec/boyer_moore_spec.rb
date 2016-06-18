@@ -8,8 +8,8 @@ describe BoyerMoore do
   end
 
   # it "should compute badcharacter heuristics" do
-  #   BoyerMoore.badcharacter_heuristic(%w{A N P A N M A N}).should == {"A"=>6, "M"=>5, "N"=>7, "P"=>2}
-  #   BoyerMoore.badcharacter_heuristic(%w{f o o b a r}).should == {"a"=>4, "b"=>3, "o"=>2, "f"=>0, "r"=>5}
+  #   BoyerMoore.character_indexes(%w{A N P A N M A N}).should == {"A"=>6, "M"=>5, "N"=>7, "P"=>2}
+  #   BoyerMoore.character_indexes(%w{f o o b a r}).should == {"a"=>4, "b"=>3, "o"=>2, "f"=>0, "r"=>5}
   # end
 
   it "should implement goodsuffix heuristics" do

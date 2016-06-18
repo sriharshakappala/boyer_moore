@@ -4,7 +4,7 @@ module BoyerMoore
   class << self
     def search(haystack, needle)
       needle.size > 0 or raise "Must pass needle with size > 0"
-      badcharacter = badcharacter_heuristic(needle)
+      char_indexes = character_indexes(needle)
       goodsuffix   = goodsuffix_heuristic(needle)
 
       index = 0
@@ -15,8 +15,8 @@ module BoyerMoore
           remaining == 0 and return index # SUCCESS!
         end
 
-        k = badcharacter[haystack[index+remaining-1]] || -1
-        skip =  if k < remaining && (m = remaining-k-1) > goodsuffix[remaining]
+        char_index = char_indexes[haystack[index+remaining-1]] || -1
+        skip =  if char_index < remaining && (m = remaining - char_index - 1) > goodsuffix[remaining]
                   m
                 else
                   goodsuffix[remaining]
@@ -25,37 +25,37 @@ module BoyerMoore
       end
     end
 
-    private
+  private
 
-    def badcharacter_heuristic(str)
-      (0...str.length).reduce({}) do |hash, i|
-        hash[str[i]] = i
+    def character_indexes(needle)
+      (0...needle.length).reduce({}) do |hash, i|
+        hash[needle[i]] = i
         hash
       end
     end
 
-    def goodsuffix_heuristic(normal)
-      prefix_normal   = prefix(normal)
-      prefix_reversed = prefix(normal.reverse)
+    def goodsuffix_heuristic(needle)
+      prefix_normal   = prefix(needle)
+      prefix_reversed = prefix(needle.reverse)
       result = []
-      (0..normal.size).each do |i|
-        result[i] = normal.size - prefix_normal[normal.size-1]
+      (0..needle.size).each do |i|
+        result[i] = needle.size - prefix_normal[needle.size-1]
       end
-      (0...normal.size).each do |i|
-        j = normal.size - prefix_reversed[i]
+      (0...needle.size).each do |i|
+        j = needle.size - prefix_reversed[i]
         k = i - prefix_reversed[i]+1
         result[j] = k if result[j] > k
       end
       result
     end
 
-    def prefix(str)
+    def prefix(needle)
       k = 0
-      (1...str.length).reduce([0]) do |prefix, q|
-        while (k > 0) && (str[k] != str[q])
+      (1...needle.length).reduce([0]) do |prefix, q|
+        while (k > 0) && (needle[k] != needle[q])
           k = prefix[k-1]
         end
-        str[k] == str[q] and k += 1
+        needle[k] == needle[q] and k += 1
         prefix[q] = k
         prefix
       end
