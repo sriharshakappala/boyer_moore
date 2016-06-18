@@ -25,6 +25,8 @@ module BoyerMoore
       end
     end
 
+    private
+
     def badcharacter_heuristic(str)
       (0...str.length).reduce({}) do |hash, i|
         hash[str[i]] = i

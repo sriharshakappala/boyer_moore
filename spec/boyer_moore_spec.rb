@@ -3,8 +3,8 @@ require 'boyer_moore'
 
 describe BoyerMoore do
   it "should compute prefixes" do
-    expect(BoyerMoore.prefix(%w{A N P A N M A N})).to eq [0, 0, 0, 1, 2, 0, 1, 2]
-    expect(BoyerMoore.prefix(%w{f o o b a r})).to eq [0, 0, 0, 0, 0, 0]
+    expect(BoyerMoore.send(:prefix, %w{A N P A N M A N})).to eq [0, 0, 0, 1, 2, 0, 1, 2]
+    expect(BoyerMoore.send(:prefix, %w{f o o b a r})).to eq [0, 0, 0, 0, 0, 0]
   end
 
   # it "should compute badcharacter heuristics" do
@@ -13,8 +13,8 @@ describe BoyerMoore do
   # end
 
   it "should implement goodsuffix heuristics" do
-    expect(BoyerMoore.goodsuffix_heuristic(%w{A N P A N M A N})).to eq [6, 6, 6, 6, 6, 6, 3, 3, 1]
-    expect(BoyerMoore.goodsuffix_heuristic(%w{f o o b a r})).to eq [6, 6, 6, 6, 6, 6, 1]
+    expect(BoyerMoore.send(:goodsuffix_heuristic, %w{A N P A N M A N})).to eq [6, 6, 6, 6, 6, 6, 3, 3, 1]
+    expect(BoyerMoore.send(:goodsuffix_heuristic, %w{f o o b a r})).to eq [6, 6, 6, 6, 6, 6, 1]
   end
 
   it "should search properly" do
