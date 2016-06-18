@@ -1,21 +1,16 @@
 require_relative "./boyer_moore/version"
 
 class RichHash
-
   def initialize
     @regexps = {}
     @regular = {}
   end
 
   def [](k)
-    regular = @regular[k]
-    return regular if regular
-    if @regexps.size > 0
-      @regexps.each do |regex,v|
-        return v if regex.match(k)
+    @regular[k] ||
+      @regexps.find do |regex,v|
+        regex.match(k) and break v
       end
-    end
-    nil
   end
 
   def []=(k,v)
@@ -25,7 +20,6 @@ class RichHash
       @regular[k] = v
     end
   end
-
 end
 
 module BoyerMoore
