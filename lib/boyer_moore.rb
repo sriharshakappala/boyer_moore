@@ -27,21 +27,21 @@ module BoyerMoore
     needle.size > 0 or raise "Must pass needle with size > 0"
     badcharacter = prepare_badcharacter_heuristic(needle)
     goodsuffix   = prepare_goodsuffix_heuristic(needle)
-    s = 0
-    while s <= haystack.size - needle.size
+    index = 0
+    while index <= haystack.size - needle.size
       j = needle.size
-      while (j > 0) && needle_matches?(needle[j-1], haystack[s+j-1])
+      while (j > 0) && needle_matches?(needle[j-1], haystack[index+j-1])
         j -= 1
       end
       if j > 0
-        k = badcharacter[haystack[s+j-1]] || -1
+        k = badcharacter[haystack[index+j-1]] || -1
         if (k < j) && (m = j-k-1) > goodsuffix[j]
-          s += m
+          index += m
         else
-          s += goodsuffix[j]
+          index += goodsuffix[j]
         end
       else
-        return s
+        return index
       end
     end
     nil
