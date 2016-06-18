@@ -24,15 +24,12 @@ module BoyerMoore
   end
 
   def self.search(haystack, needle)
-    needle_len = needle.size
-    haystack_len = haystack.size
-    return nil if haystack_len == 0
-    return haystack if needle_len == 0
+    return haystack if needle.size == 0
     badcharacter = prepare_badcharacter_heuristic(needle)
     goodsuffix   = prepare_goodsuffix_heuristic(needle)
     s = 0
-    while s <= haystack_len - needle_len
-      j = needle_len
+    while s <= haystack.size - needle.size
+      j = needle.size
       while (j > 0) && needle_matches?(needle[j-1], haystack[s+j-1])
         j -= 1
       end
@@ -59,16 +56,15 @@ module BoyerMoore
   end
 
   def self.prepare_goodsuffix_heuristic(normal)
-    size = normal.size
     reversed = normal.reverse
     prefix_normal = compute_prefix(normal)
     prefix_reversed = compute_prefix(reversed)
     result = []
-    (0..size).each do |i|
-      result[i] = size - prefix_normal[size-1]
+    (0..normal.size).each do |i|
+      result[i] = normal.size - prefix_normal[normal.size-1]
     end
-    (0...size).each do |i|
-      j = size - prefix_reversed[i]
+    (0...normal.size).each do |i|
+      j = normal.size - prefix_reversed[i]
       k = i - prefix_reversed[i]+1
       result[j] = k if result[j] > k
     end
@@ -84,10 +80,9 @@ module BoyerMoore
   end
 
   def self.compute_prefix(str)
-    size = str.length
     k = 0
     result = [0]
-    (1...size).each do |q|
+    (1...str.length).each do |q|
       while (k > 0) && (str[k] != str[q])
         k = result[k-1]
       end
