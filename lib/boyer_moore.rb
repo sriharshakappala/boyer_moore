@@ -1,4 +1,4 @@
-require "boyer_moore/version"
+require_relative "./boyer_moore/version"
 
 class RichHash
 
