@@ -49,14 +49,13 @@ module BoyerMoore
 
   def self.compute_prefix(str)
     k = 0
-    result = [0]
-    (1...str.length).each do |q|
+    (1...str.length).reduce([0]) do |prefix, q|
       while (k > 0) && (str[k] != str[q])
-        k = result[k-1]
+        k = prefix[k-1]
       end
       k += 1 if str[k] == str[q]
-      result[q] = k
+      prefix[q] = k
+      prefix
     end
-    result
   end
 end
