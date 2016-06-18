@@ -35,9 +35,8 @@ module BoyerMoore
     end
 
     def goodsuffix_heuristic(normal)
-      reversed = normal.reverse
-      prefix_normal = prefix(normal)
-      prefix_reversed = prefix(reversed)
+      prefix_normal   = prefix(normal)
+      prefix_reversed = prefix(normal.reverse)
       result = []
       (0..normal.size).each do |i|
         result[i] = normal.size - prefix_normal[normal.size-1]
