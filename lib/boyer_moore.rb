@@ -24,7 +24,7 @@ module BoyerMoore
   end
 
   def self.search(haystack, needle)
-    return haystack if needle.size == 0
+    needle.size > 0 or raise "Must pass needle with size > 0"
     badcharacter = prepare_badcharacter_heuristic(needle)
     goodsuffix   = prepare_goodsuffix_heuristic(needle)
     s = 0
