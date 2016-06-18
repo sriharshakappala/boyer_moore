@@ -52,7 +52,7 @@ module BoyerMoore
 
   def self.prepare_badcharacter_heuristic(str)
     result = RichHash.new
-    0.upto(str.length - 1) do |i|
+    (0...str.length).each do |i|
       result[str[i]] = i
     end
     result
@@ -64,10 +64,10 @@ module BoyerMoore
     prefix_normal = compute_prefix(normal)
     prefix_reversed = compute_prefix(reversed)
     result = []
-    0.upto(size) do |i|
+    (0..size).each do |i|
       result[i] = size - prefix_normal[size-1]
     end
-    0.upto(size-1) do |i|
+    (0...size).each do |i|
       j = size - prefix_reversed[i]
       k = i - prefix_reversed[i]+1
       result[j] = k if result[j] > k
@@ -87,7 +87,7 @@ module BoyerMoore
     size = str.length
     k = 0
     result = [0]
-    1.upto(size - 1) do |q|
+    (1...size).each do |q|
       while (k > 0) && (str[k] != str[q])
         k = result[k-1]
       end
