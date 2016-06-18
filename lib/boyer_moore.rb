@@ -43,8 +43,8 @@ module BoyerMoore
       end
       (0...needle.size).each do |i|
         j = needle.size - prefix_reversed[i]
-        k = i - prefix_reversed[i]+1
-        result[j] = k if result[j] > k
+        k = i - prefix_reversed[i] + 1
+        result[j] > k and result[j] = k
       end
       result
     end
@@ -52,8 +52,8 @@ module BoyerMoore
     def prefix(needle)
       k = 0
       (1...needle.length).reduce([0]) do |prefix, q|
-        while (k > 0) && (needle[k] != needle[q])
-          k = prefix[k-1]
+        while k > 0 && needle[k] != needle[q]
+          k = prefix[k - 1]
         end
         needle[k] == needle[q] and k += 1
         prefix[q] = k
