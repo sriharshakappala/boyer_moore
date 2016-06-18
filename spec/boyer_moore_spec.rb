@@ -8,13 +8,13 @@ describe BoyerMoore do
   end
 
   # it "should compute badcharacter heuristics" do
-  #   BoyerMoore.prepare_badcharacter_heuristic(%w{A N P A N M A N}).should == {"A"=>6, "M"=>5, "N"=>7, "P"=>2}
-  #   BoyerMoore.prepare_badcharacter_heuristic(%w{f o o b a r}).should == {"a"=>4, "b"=>3, "o"=>2, "f"=>0, "r"=>5}
+  #   BoyerMoore.badcharacter_heuristic(%w{A N P A N M A N}).should == {"A"=>6, "M"=>5, "N"=>7, "P"=>2}
+  #   BoyerMoore.badcharacter_heuristic(%w{f o o b a r}).should == {"a"=>4, "b"=>3, "o"=>2, "f"=>0, "r"=>5}
   # end
 
-  it "should prepare goodsuffix heuristics" do
-    expect(BoyerMoore.prepare_goodsuffix_heuristic(%w{A N P A N M A N})).to eq [6, 6, 6, 6, 6, 6, 3, 3, 1] 
-    expect(BoyerMoore.prepare_goodsuffix_heuristic(%w{f o o b a r})).to eq [6, 6, 6, 6, 6, 6, 1]
+  it "should implement goodsuffix heuristics" do
+    expect(BoyerMoore.goodsuffix_heuristic(%w{A N P A N M A N})).to eq [6, 6, 6, 6, 6, 6, 3, 3, 1]
+    expect(BoyerMoore.goodsuffix_heuristic(%w{f o o b a r})).to eq [6, 6, 6, 6, 6, 6, 1]
   end
 
   it "should search properly" do

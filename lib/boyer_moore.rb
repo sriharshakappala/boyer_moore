@@ -3,8 +3,8 @@ require_relative "./boyer_moore/version"
 module BoyerMoore
   def self.search(haystack, needle)
     needle.size > 0 or raise "Must pass needle with size > 0"
-    badcharacter = prepare_badcharacter_heuristic(needle)
-    goodsuffix   = prepare_goodsuffix_heuristic(needle)
+    badcharacter = badcharacter_heuristic(needle)
+    goodsuffix   = goodsuffix_heuristic(needle)
 
     index = 0
     while index <= haystack.size - needle.size
@@ -24,14 +24,14 @@ module BoyerMoore
     end
   end
 
-  def self.prepare_badcharacter_heuristic(str)
+  def self.badcharacter_heuristic(str)
     (0...str.length).reduce({}) do |hash, i|
       hash[str[i]] = i
       hash
     end
   end
 
-  def self.prepare_goodsuffix_heuristic(normal)
+  def self.goodsuffix_heuristic(normal)
     reversed = normal.reverse
     prefix_normal = compute_prefix(normal)
     prefix_reversed = compute_prefix(reversed)
@@ -53,7 +53,7 @@ module BoyerMoore
       while (k > 0) && (str[k] != str[q])
         k = prefix[k-1]
       end
-      k += 1 if str[k] == str[q]
+      str[k] == str[q] and k += 1
       prefix[q] = k
       prefix
     end
