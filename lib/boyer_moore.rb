@@ -37,8 +37,7 @@ module BoyerMoore
         j -= 1
       end
       if j > 0
-        k = badcharacter[haystack[s+j-1]]
-        k = -1 unless k
+        k = badcharacter[haystack[s+j-1]] || -1
         if (k < j) && (m = j-k-1) > goodsuffix[j]
           s += m
         else
