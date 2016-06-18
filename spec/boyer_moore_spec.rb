@@ -3,8 +3,8 @@ require 'boyer_moore'
 
 describe BoyerMoore do
   it "should compute prefixes" do
-    expect(BoyerMoore.compute_prefix(%w{A N P A N M A N})).to eq [0, 0, 0, 1, 2, 0, 1, 2]
-    expect(BoyerMoore.compute_prefix(%w{f o o b a r})).to eq [0, 0, 0, 0, 0, 0]
+    expect(BoyerMoore.prefix(%w{A N P A N M A N})).to eq [0, 0, 0, 1, 2, 0, 1, 2]
+    expect(BoyerMoore.prefix(%w{f o o b a r})).to eq [0, 0, 0, 0, 0, 0]
   end
 
   # it "should compute badcharacter heuristics" do

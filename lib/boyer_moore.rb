@@ -33,8 +33,8 @@ module BoyerMoore
 
   def self.goodsuffix_heuristic(normal)
     reversed = normal.reverse
-    prefix_normal = compute_prefix(normal)
-    prefix_reversed = compute_prefix(reversed)
+    prefix_normal = prefix(normal)
+    prefix_reversed = prefix(reversed)
     result = []
     (0..normal.size).each do |i|
       result[i] = normal.size - prefix_normal[normal.size-1]
@@ -47,7 +47,7 @@ module BoyerMoore
     result
   end
 
-  def self.compute_prefix(str)
+  def self.prefix(str)
     k = 0
     (1...str.length).reduce([0]) do |prefix, q|
       while (k > 0) && (str[k] != str[q])
