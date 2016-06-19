@@ -9,13 +9,13 @@ describe BoyerMoore do
     end
 
     it "should compute character_indexes" do
-      expect(BoyerMoore::Needle.new(%w{A N P A N M A N}).character_indexes).to eq({"A"=>6, "M"=>5, "N"=>7, "P"=>2})
-      expect(BoyerMoore::Needle.new(%w{f o o b a r}).character_indexes).to eq ({"a"=>4, "b"=>3, "o"=>2, "f"=>0, "r"=>5})
+      expect(BoyerMoore::Needle.new(%w{A N P A N M A N}).send(:character_indexes)).to eq({"A"=>6, "M"=>5, "N"=>7, "P"=>2})
+      expect(BoyerMoore::Needle.new(%w{f o o b a r}).send(:character_indexes)).to eq ({"a"=>4, "b"=>3, "o"=>2, "f"=>0, "r"=>5})
     end
 
     it "should implement good_suffixes" do
-      expect(BoyerMoore::Needle.new(%w{A N P A N M A N}).good_suffixes).to eq [6, 6, 6, 6, 6, 6, 3, 3, 1]
-      expect(BoyerMoore::Needle.new(%w{f o o b a r}).good_suffixes).to eq [6, 6, 6, 6, 6, 6, 1]
+      expect(BoyerMoore::Needle.new(%w{A N P A N M A N}).send(:good_suffixes)).to eq [6, 6, 6, 6, 6, 6, 3, 3, 1]
+      expect(BoyerMoore::Needle.new(%w{f o o b a r}).send(:good_suffixes)).to eq [6, 6, 6, 6, 6, 6, 1]
     end
   end
 

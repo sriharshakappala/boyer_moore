@@ -45,6 +45,7 @@ module BoyerMoore
       good_suffixes[remaining]
     end
 
+  private
 
     def character_indexes
       @char_indexes ||=
