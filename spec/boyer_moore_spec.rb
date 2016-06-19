@@ -4,8 +4,8 @@ require 'boyer_moore'
 describe BoyerMoore do
   describe BoyerMoore::Needle do
     it "should compute prefixes" do
-      expect(BoyerMoore::Needle.new("abc").prefix(%w{A N P A N M A N})).to eq [0, 0, 0, 1, 2, 0, 1, 2]
-      expect(BoyerMoore::Needle.new("abc").prefix(%w{f o o b a r})).to eq [0, 0, 0, 0, 0, 0]
+      expect(BoyerMoore::Needle::prefix(%w{A N P A N M A N})).to eq [0, 0, 0, 1, 2, 0, 1, 2]
+      expect(BoyerMoore::Needle::prefix(%w{f o o b a r})).to eq [0, 0, 0, 0, 0, 0]
     end
 
     it "should compute character_indexes" do

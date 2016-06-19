@@ -57,8 +57,8 @@ module BoyerMoore
     def good_suffixes
       @good_suffixes ||=
         begin
-          prefix_normal   = prefix(@needle)
-          prefix_reversed = prefix(@needle.reverse)
+          prefix_normal   = self.class.prefix(@needle)
+          prefix_reversed = self.class.prefix(@needle.reverse)
           result = []
           (0..@needle.size).each do |i|
             result[i] = @needle.size - prefix_normal[@needle.size-1]
@@ -72,7 +72,7 @@ module BoyerMoore
         end
     end
 
-    def prefix(string)
+    def self.prefix(string)
       k = 0
       (1...string.length).reduce([0]) do |prefix, q|
         while k > 0 && string[k] != string[q]
