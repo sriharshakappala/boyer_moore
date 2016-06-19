@@ -44,9 +44,9 @@ module BoyerMoore
     end
 
     def match_or_skip_by(haystack, haystack_index)
-      if mismatch_index = mismatch_index(haystack, haystack_index)
-        mismatch_char = haystack[haystack_index + mismatch_index]
-        skip_by(mismatch_char, mismatch_index)
+      if mismatch_idx = mismatch_index(haystack, haystack_index)
+        mismatch_char = haystack[haystack_index + mismatch_idx]
+        skip_by(mismatch_char, mismatch_idx)
       end
     end
 
