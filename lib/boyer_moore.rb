@@ -59,8 +59,6 @@ module BoyerMoore
       end
     end
 
-    private
-
     def character_indexes
       @char_indexes ||=
         (0...@needle.length).reduce({}) do |hash, i|
