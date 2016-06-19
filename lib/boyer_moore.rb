@@ -14,10 +14,11 @@ module BoyerMoore
         end
 
         char_index = needle.character_index(haystack[index+remaining-1])
-        skip =  if char_index < remaining && (m = remaining - char_index - 1) > needle.good_suffix[remaining]
+        suffix = needle.good_suffix(remaining)
+        skip =  if char_index < remaining && (m = remaining - char_index - 1) > suffix
                   m
                 else
-                  needle.good_suffix[remaining]
+                  suffix
                 end
         index += skip
       end
@@ -28,10 +29,6 @@ module BoyerMoore
     def initialize(needle)
       needle.size > 0 or raise "Must pass needle with size > 0"
       @needle = needle
-    end
-
-    def to_s
-      @needle
     end
 
     def size
@@ -46,6 +43,11 @@ module BoyerMoore
       character_indexes[char] || -1
     end
 
+    def good_suffix(remaining)
+      good_suffixes[remaining]
+    end
+
+
     def character_indexes
       @char_indexes ||=
         (0...@needle.length).reduce({}) do |hash, i|
@@ -54,8 +56,8 @@ module BoyerMoore
         end
     end
 
-    def good_suffix
-      @good_suffix ||=
+    def good_suffixes
+      @good_suffixes ||=
         begin
           prefix_normal   = prefix(@needle)
           prefix_reversed = prefix(@needle.reverse)
