@@ -4,15 +4,15 @@ module BoyerMoore
   def self.search(haystack, needle_string)
     needle = Needle.new(needle_string)
 
-    index = 0
-    while index <= haystack.size - needle.size
-      remaining = needle.size
-      while needle[remaining - 1] == haystack[index + remaining - 1]
-        remaining -= 1
-        remaining == 0 and return index # SUCCESS!
+    haystack_index = 0
+    while haystack_index <= haystack.size - needle.size
+      compare_index = needle.size - 1
+      while needle[compare_index] == haystack[haystack_index + compare_index]
+        compare_index -= 1
+        compare_index < 0 and return haystack_index # SUCCESS!
       end
 
-      index += needle.skip_index(haystack[index + remaining - 1], remaining)
+      haystack_index += needle.skip_index(haystack[haystack_index + compare_index], compare_index)
     end
   end
 
@@ -34,14 +34,14 @@ module BoyerMoore
       character_indexes[char] || -1
     end
 
-    def good_suffix(remaining)
-      good_suffixes[remaining]
+    def good_suffix(compare_index)
+      good_suffixes[compare_index]
     end
 
-    def skip_index(mismatch_char, remaining)
+    def skip_index(mismatch_char, compare_index)
       mismatch_char_index = character_index(mismatch_char)
-      suffix_index = good_suffix(remaining)
-      if mismatch_char_index < remaining && (m = remaining - mismatch_char_index - 1) > suffix_index
+      suffix_index = good_suffix(compare_index + 1)
+      if mismatch_char_index <= compare_index && (m = compare_index - mismatch_char_index) > suffix_index
         m
       else
         suffix_index
