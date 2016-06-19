@@ -12,14 +12,7 @@ module BoyerMoore
         remaining == 0 and return index # SUCCESS!
       end
 
-      mismatch_char_index = needle.character_index(haystack[index + remaining - 1])
-      suffix_index = needle.good_suffix(remaining)
-      skip =  if mismatch_char_index < remaining && (m = remaining - mismatch_char_index - 1) > suffix_index
-                m
-              else
-                suffix_index
-              end
-      index += skip
+      index += needle.skip_index(haystack[index + remaining - 1], remaining)
     end
   end
 
@@ -45,7 +38,17 @@ module BoyerMoore
       good_suffixes[remaining]
     end
 
-  private
+    def skip_index(mismatch_char, remaining)
+      mismatch_char_index = character_index(mismatch_char)
+      suffix_index = good_suffix(remaining)
+      if mismatch_char_index < remaining && (m = remaining - mismatch_char_index - 1) > suffix_index
+        m
+      else
+        suffix_index
+      end
+    end
+
+    private
 
     def character_indexes
       @char_indexes ||=
