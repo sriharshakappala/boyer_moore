@@ -6,11 +6,9 @@ module BoyerMoore
 
     haystack_index = 0
     while haystack_index <= haystack.size - needle.size
-      mismatch_index = needle.mismatch_index(haystack, haystack_index) or
-        break haystack_index # SUCCESS!
+      skip_by_index = needle.skip_by_index(haystack, haystack_index) or break haystack_index # SUCCESS!
 
-      mismatch_char = haystack[haystack_index + mismatch_index]
-      haystack_index += needle.skip_by(mismatch_char, mismatch_index)
+      haystack_index += skip_by_index
     end
   end
 
@@ -43,6 +41,14 @@ module BoyerMoore
 
     def good_suffix(compare_index)
       good_suffixes[compare_index]
+    end
+
+    def skip_by_index(haystack, haystack_index)
+      mismatch_index = mismatch_index(haystack, haystack_index) or
+        return nil # SUCCESS!
+
+      mismatch_char = haystack[haystack_index + mismatch_index]
+      skip_by(mismatch_char, mismatch_index)
     end
 
     def skip_by(mismatch_char, compare_index)
