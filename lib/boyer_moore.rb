@@ -6,9 +6,9 @@ module BoyerMoore
 
     haystack_index = 0
     while haystack_index <= haystack.size - needle.size
-      match_or_skip_by = needle.match_or_skip_by(haystack, haystack_index) or break haystack_index # SUCCESS!
+      skip_by = needle.match_or_skip_by(haystack, haystack_index) or break haystack_index # SUCCESS!
 
-      haystack_index += match_or_skip_by
+      haystack_index += skip_by
     end
   end
 
@@ -44,11 +44,10 @@ module BoyerMoore
     end
 
     def match_or_skip_by(haystack, haystack_index)
-      mismatch_index = mismatch_index(haystack, haystack_index) or
-        return nil # SUCCESS!
-
-      mismatch_char = haystack[haystack_index + mismatch_index]
-      skip_by(mismatch_char, mismatch_index)
+      if mismatch_index = mismatch_index(haystack, haystack_index)
+        mismatch_char = haystack[haystack_index + mismatch_index]
+        skip_by(mismatch_char, mismatch_index)
+      end
     end
 
     def skip_by(mismatch_char, compare_index)
