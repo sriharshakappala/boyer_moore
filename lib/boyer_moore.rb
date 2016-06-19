@@ -24,10 +24,6 @@ module BoyerMoore
       @needle.size
     end
 
-    def [](n)
-      @needle[n]
-    end
-
     def match_or_skip_by(haystack, haystack_index)
       if mismatch_idx = mismatch_index(haystack, haystack_index)
         mismatch_char_index = character_index(haystack[haystack_index + mismatch_idx])
