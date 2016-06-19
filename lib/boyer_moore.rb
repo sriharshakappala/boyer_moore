@@ -1,27 +1,25 @@
 require_relative "./boyer_moore/version"
 
 module BoyerMoore
-  class << self
-    def search(haystack, needle_string)
-      needle = Needle.new(needle_string)
+  def self.search(haystack, needle_string)
+    needle = Needle.new(needle_string)
 
-      index = 0
-      while index <= haystack.size - needle.size
-        remaining = needle.size
-        while needle[remaining-1] == haystack[index+remaining-1]
-          remaining -= 1
-          remaining == 0 and return index # SUCCESS!
-        end
-
-        char_index = needle.character_index(haystack[index+remaining-1])
-        suffix = needle.good_suffix(remaining)
-        skip =  if char_index < remaining && (m = remaining - char_index - 1) > suffix
-                  m
-                else
-                  suffix
-                end
-        index += skip
+    index = 0
+    while index <= haystack.size - needle.size
+      remaining = needle.size
+      while needle[remaining - 1 ] == haystack[index + remaining - 1]
+        remaining -= 1
+        remaining == 0 and return index # SUCCESS!
       end
+
+      char_index = needle.character_index(haystack[index + remaining - 1])
+      suffix = needle.good_suffix(remaining)
+      skip =  if char_index < remaining && (m = remaining - char_index - 1) > suffix
+                m
+              else
+                suffix
+              end
+      index += skip
     end
   end
 
