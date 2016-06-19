@@ -6,11 +6,11 @@ module BoyerMoore
 
     haystack_index = 0
     while haystack_index <= haystack.size - needle.size
-      unless mismatch_index = needle.mismatch_index(haystack, haystack_index)
+      mismatch_index = needle.mismatch_index(haystack, haystack_index) or
         break haystack_index # SUCCESS!
-      end
 
-      haystack_index += needle.skip_by(haystack[haystack_index + mismatch_index], mismatch_index)
+      mismatch_char = haystack[haystack_index + mismatch_index]
+      haystack_index += needle.skip_by(mismatch_char, mismatch_index)
     end
   end
 
