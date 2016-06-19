@@ -2,19 +2,21 @@ require File.dirname(__FILE__) + '/spec_helper'
 require 'boyer_moore'
 
 describe BoyerMoore do
-  it "should compute prefixes" do
-    expect(BoyerMoore.send(:prefix, %w{A N P A N M A N})).to eq [0, 0, 0, 1, 2, 0, 1, 2]
-    expect(BoyerMoore.send(:prefix, %w{f o o b a r})).to eq [0, 0, 0, 0, 0, 0]
-  end
+  describe BoyerMoore::Needle do
+    it "should compute prefixes" do
+      expect(BoyerMoore::Needle.new("abc").prefix(%w{A N P A N M A N})).to eq [0, 0, 0, 1, 2, 0, 1, 2]
+      expect(BoyerMoore::Needle.new("abc").prefix(%w{f o o b a r})).to eq [0, 0, 0, 0, 0, 0]
+    end
 
-  # it "should compute badcharacter heuristics" do
-  #   BoyerMoore.character_indexes(%w{A N P A N M A N}).should == {"A"=>6, "M"=>5, "N"=>7, "P"=>2}
-  #   BoyerMoore.character_indexes(%w{f o o b a r}).should == {"a"=>4, "b"=>3, "o"=>2, "f"=>0, "r"=>5}
-  # end
+    it "should compute character_indexes" do
+      expect(BoyerMoore::Needle.new(%w{A N P A N M A N}).character_indexes).to eq({"A"=>6, "M"=>5, "N"=>7, "P"=>2})
+      expect(BoyerMoore::Needle.new(%w{f o o b a r}).character_indexes).to eq ({"a"=>4, "b"=>3, "o"=>2, "f"=>0, "r"=>5})
+    end
 
-  it "should implement goodsuffix heuristics" do
-    expect(BoyerMoore.send(:goodsuffix_heuristic, %w{A N P A N M A N})).to eq [6, 6, 6, 6, 6, 6, 3, 3, 1]
-    expect(BoyerMoore.send(:goodsuffix_heuristic, %w{f o o b a r})).to eq [6, 6, 6, 6, 6, 6, 1]
+    it "should implement good_suffix" do
+      expect(BoyerMoore::Needle.new(%w{A N P A N M A N}).good_suffix).to eq [6, 6, 6, 6, 6, 6, 3, 3, 1]
+      expect(BoyerMoore::Needle.new(%w{f o o b a r}).good_suffix).to eq [6, 6, 6, 6, 6, 6, 1]
+    end
   end
 
   it "should search properly" do
