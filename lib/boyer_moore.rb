@@ -13,11 +13,11 @@ module BoyerMoore
       end
 
       char_index = needle.character_index(haystack[index + remaining - 1])
-      suffix = needle.good_suffix(remaining)
-      skip =  if char_index < remaining && (m = remaining - char_index - 1) > suffix
+      suffix_index = needle.good_suffix(remaining)
+      skip =  if char_index < remaining && (m = remaining - char_index - 1) > suffix_index
                 m
               else
-                suffix
+                suffix_index
               end
       index += skip
     end
