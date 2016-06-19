@@ -45,13 +45,12 @@ module BoyerMoore
 
     def match_or_skip_by(haystack, haystack_index)
       if mismatch_idx = mismatch_index(haystack, haystack_index)
-        mismatch_char = haystack[haystack_index + mismatch_idx]
-        skip_by(mismatch_char, mismatch_idx)
+        mismatch_char_index = character_index(haystack[haystack_index + mismatch_idx])
+        skip_by(mismatch_char_index, mismatch_idx)
       end
     end
 
-    def skip_by(mismatch_char, compare_index)
-      mismatch_char_index = character_index(mismatch_char)
+    def skip_by(mismatch_char_index, compare_index)
       suffix_index = good_suffix(compare_index + 1)
       if mismatch_char_index <= compare_index && (m = compare_index - mismatch_char_index) > suffix_index
         m
