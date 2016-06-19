@@ -7,14 +7,14 @@ module BoyerMoore
     index = 0
     while index <= haystack.size - needle.size
       remaining = needle.size
-      while needle[remaining - 1 ] == haystack[index + remaining - 1]
+      while needle[remaining - 1] == haystack[index + remaining - 1]
         remaining -= 1
         remaining == 0 and return index # SUCCESS!
       end
 
-      char_index = needle.character_index(haystack[index + remaining - 1])
+      mismatch_char_index = needle.character_index(haystack[index + remaining - 1])
       suffix_index = needle.good_suffix(remaining)
-      skip =  if char_index < remaining && (m = remaining - char_index - 1) > suffix_index
+      skip =  if mismatch_char_index < remaining && (m = remaining - mismatch_char_index - 1) > suffix_index
                 m
               else
                 suffix_index
