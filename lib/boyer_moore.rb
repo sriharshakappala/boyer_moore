@@ -13,7 +13,7 @@ module BoyerMoore
           remaining == 0 and return index # SUCCESS!
         end
 
-        char_index = needle.character_indexes[haystack[index+remaining-1]] || -1
+        char_index = needle.character_index(haystack[index+remaining-1])
         skip =  if char_index < remaining && (m = remaining - char_index - 1) > needle.good_suffix[remaining]
                   m
                 else
@@ -40,6 +40,10 @@ module BoyerMoore
 
     def [](n)
       @needle[n]
+    end
+
+    def character_index(char)
+      character_indexes[char] || -1
     end
 
     def character_indexes
