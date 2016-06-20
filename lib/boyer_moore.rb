@@ -1,108 +1,100 @@
-require "boyer_moore/version"
-
-class RichHash
-
-  def initialize
-    @regexps = {}
-    @regular = {}
-  end
-
-  def [](k)
-    regular = @regular[k]
-    return regular if regular
-    if @regexps.size > 0
-      @regexps.each do |regex,v|
-        return v if regex.match(k)
-      end
-    end
-    nil
-  end
-
-  def []=(k,v)
-    if k.kind_of?(Regexp)
-      @regexps[k] = v
-    else
-      @regular[k] = v
-    end
-  end
-
-end
+require_relative "./boyer_moore/version"
 
 module BoyerMoore
+  def self.search(haystack, needle_string)
+    needle = Needle.new(needle_string)
 
-  def self.search(haystack, needle)
-    needle_len = needle.size
-    haystack_len = haystack.size
-    return nil if haystack_len == 0
-    return haystack if needle_len == 0
-    badcharacter = self.prepare_badcharacter_heuristic(needle)
-    goodsuffix   = self.prepare_goodsuffix_heuristic(needle)
-    s = 0
-    while s <= haystack_len - needle_len
-      j = needle_len
-      while (j > 0) && self.needle_matches?(needle[j-1], haystack[s+j-1])
-        j -= 1
-      end
-      if(j > 0)
-        k = badcharacter[haystack[s+j-1]]
-        k = -1 unless k
-        if (k < j) && (m = j-k-1) > goodsuffix[j]
-          s += m
-        else
-          s += goodsuffix[j]
-        end
+    haystack_index = 0
+    while haystack_index <= haystack.size - needle.size
+      if skip_by = needle.match_or_skip_by(haystack, haystack_index)
+        haystack_index += skip_by
       else
-        return s
+        break haystack_index # Found a match at haystack_index!
       end
     end
-    return nil
   end
 
-  def self.prepare_badcharacter_heuristic(str)
-    result = RichHash.new
-    0.upto(str.length - 1) do |i|
-      result[str[i]] = i
+  class Needle
+    def initialize(needle)
+      needle.size > 0 or raise "Must pass needle with size > 0"
+      @needle = needle
     end
-    result
-  end
 
-  def self.prepare_goodsuffix_heuristic(normal)
-    size = normal.size
-    result = []
-    reversed = normal.dup.reverse
-    prefix_normal = compute_prefix(normal)
-    prefix_reversed = compute_prefix(reversed)
-    0.upto(size) do |i|
-      result[i] = size - prefix_normal[size-1]
+    def size
+      @needle.size
     end
-    0.upto(size-1) do |i|
-      j = size - prefix_reversed[i]
-      k = i - prefix_reversed[i]+1
-      result[j] = k if result[j] > k
-    end
-    result
-  end
 
-  def self.needle_matches?(needle, haystack)
-    if needle.kind_of?(Regexp)
-      needle.match(haystack) ? true : false
-    else
-      needle == haystack
-    end
-  end
-
-  def self.compute_prefix(str)
-    size = str.length
-    k = 0
-    result = [0]
-    1.upto(size - 1) do |q|
-      while (k > 0) && (str[k] != str[q])
-        k = result[k-1]
+    def match_or_skip_by(haystack, haystack_index)
+      if mismatch_idx = mismatch_index(haystack, haystack_index)
+        mismatch_char_index = character_index(haystack[haystack_index + mismatch_idx])
+        skip_by(mismatch_char_index, mismatch_idx)
       end
-      k += 1 if(str[k] == str[q])
-      result[q] = k
     end
-    result
-  end
 
+  private
+
+    def mismatch_index(haystack, haystack_index)
+      compare_index = size - 1
+      while @needle[compare_index] == haystack[haystack_index + compare_index]
+        compare_index -= 1
+        compare_index < 0 and return nil
+      end
+      compare_index
+    end
+
+    def character_index(char)
+      character_indexes[char] || -1
+    end
+
+    def good_suffix(compare_index)
+      good_suffixes[compare_index]
+    end
+
+    def skip_by(mismatch_char_index, compare_index)
+      suffix_index = good_suffix(compare_index + 1)
+      if mismatch_char_index <= compare_index && (m = compare_index - mismatch_char_index) > suffix_index
+        m
+      else
+        suffix_index
+      end
+    end
+
+    def character_indexes
+      @char_indexes ||=
+        (0...@needle.length).reduce({}) do |hash, i|
+          hash[@needle[i]] = i
+          hash
+        end
+    end
+
+    def good_suffixes
+      @good_suffixes ||=
+        begin
+          prefix_normal   = self.class.prefix(@needle)
+          prefix_reversed = self.class.prefix(@needle.reverse)
+          result = []
+          (0..@needle.size).each do |i|
+            result[i] = @needle.size - prefix_normal[@needle.size-1]
+          end
+          (0...@needle.size).each do |i|
+            j = @needle.size - prefix_reversed[i]
+            k = i - prefix_reversed[i] + 1
+            result[j] > k and result[j] = k
+          end
+          result
+        end
+    end
+
+    def self.prefix(string)
+      k = 0
+      (1...string.length).reduce([0]) do |prefix, q|
+        while k > 0 && string[k] != string[q]
+          k = prefix[k - 1]
+        end
+        string[k] == string[q] and k += 1
+        prefix[q] = k
+        prefix
+      end
+    end
+  end
 end
