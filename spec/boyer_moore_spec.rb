@@ -18,18 +18,36 @@ describe BoyerMoore do
     end
   end
 
-  it "should search properly" do
-    expect(BoyerMoore.search("ANPANMAN", "ANP")).to eq 0
-    expect(BoyerMoore.search("ANPANMAN", "ANPXX")).to eq nil 
-    expect(BoyerMoore.search("ANPANMAN", "MAN")).to eq 5
-    expect(BoyerMoore.search("foobar", "bar")).to eq 3
-    expect(BoyerMoore.search("foobar", "zar")).to eq nil 
+  it "should find properly" do
+    expect(BoyerMoore.find("ANPANMAN", "ANP")).to eq 0
+    expect(BoyerMoore.find("ANPANMAN", "ANPXX")).to eq nil
+    expect(BoyerMoore.find("ANPANMAN", "MAN")).to eq 5
+    expect(BoyerMoore.find("foobar", "bar")).to eq 3
+    expect(BoyerMoore.find("foobar", "zar")).to eq nil
+  end
+
+  it "should implement each properly" do
+    yielded = []
+    BoyerMoore.each("ANPANMAN", "AN") { |index| yielded << index }
+    expect(yielded).to eq [0, 3, 6]
+    yielded = []
+    BoyerMoore.each("ANANAN", "AN") { |index| yielded << index }
+    expect(yielded).to eq [0, 2, 4]
+    yielded = []
+    BoyerMoore.each("AAAB", "A") { |index| yielded << index }
+    expect(yielded).to eq [0, 1, 2]
+    yielded = []
+    BoyerMoore.each("ANPANMAN", "MAN") { |index| yielded << index }
+    expect(yielded).to eq [5]
+    yielded = []
+    BoyerMoore.each("foobar", "zar") { |index| yielded << index }
+    expect(yielded).to eq []
   end
 
   it "should match ruby's #index for basic strings" do
     needle = 'abcab'
     ['12abcabc', 'abcgghhhaabcabccccc', '123456789abc123abc', 'aabbcc'].each do |haystack|
-      expect(BoyerMoore.search(haystack, needle)).to eq haystack.index(needle)
+      expect(BoyerMoore.find(haystack, needle)).to eq haystack.index(needle)
     end
   end
   
@@ -40,12 +58,12 @@ describe BoyerMoore do
       %w[e f g] => nil,
       %w[m y _ d o g _ a b c] => 7
     }.each do |haystack, position|
-      expect(BoyerMoore.search(haystack, ['a', 'b', 'c'])).to eq position
+      expect(BoyerMoore.find(haystack, ['a', 'b', 'c'])).to eq position
     end
   end
 
   it "should match in the middle of a string" do
-    expect(BoyerMoore.search("xxxfoobarbazxxx".split(''), "foobar".split(''))).to eq 3
+    expect(BoyerMoore.find("xxxfoobarbazxxx".split(''), "foobar".split(''))).to eq 3
   end
 
   it "should match words" do
@@ -55,7 +73,7 @@ describe BoyerMoore do
       ["put", "foo", "bar", "bar"] => 1,
       ["put", "foo", "bar", "foo", "bar"] => 1
     }.each do |haystack, position|
-      expect(BoyerMoore.search(haystack, ["foo", "bar"])).to eq position
+      expect(BoyerMoore.find(haystack, ["foo", "bar"])).to eq position
     end
   end
 end

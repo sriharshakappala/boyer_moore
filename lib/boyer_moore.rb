@@ -1,7 +1,11 @@
 require_relative "./boyer_moore/version"
 
 module BoyerMoore
-  def self.search(haystack, needle_string)
+  def self.find(haystack, needle_string)
+    each(haystack, needle_string) { |index| return index }
+  end
+
+  def self.each(haystack, needle_string)
     needle = Needle.new(needle_string)
 
     haystack_index = 0
@@ -9,7 +13,8 @@ module BoyerMoore
       if skip_by = needle.match_or_skip_by(haystack, haystack_index)
         haystack_index += skip_by
       else
-        break haystack_index # Found a match at haystack_index!
+        yield haystack_index # Found a match at haystack_index!
+        haystack_index += needle.size
       end
     end
   end
