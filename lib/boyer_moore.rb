@@ -3,6 +3,7 @@ require_relative "./boyer_moore/version"
 module BoyerMoore
   def self.find(haystack, needle_string)
     each(haystack, needle_string) { |index| return index }
+    nil
   end
 
   def self.each(haystack, needle_string)
