@@ -1,6 +1,19 @@
 require_relative "./boyer_moore/version"
 
 module BoyerMoore
+
+  # Yields the index of each match of needle_string in haystack.
+  # If no block given, returns an Enumerator that does the same.
+  # Starts at starting_haystack_index (default = 0).
+  def self.search(haystack, needle_string, starting_haystack_index = 0, &block)
+    enumerator = Enumerator.new(haystack, needle_string, starting_haystack_index)
+    if block
+      enumerator.each(&block)
+    else
+      enumerator.to_enum(:each)
+    end
+  end
+
   class Enumerator
     def initialize(haystack, needle_string, starting_haystack_index = 0)
       @haystack = haystack
@@ -17,20 +30,6 @@ module BoyerMoore
           @haystack_index += @needle.size
         end
       end
-    end
-  end
-
-  def self.find(haystack, needle_string)
-    each(haystack, needle_string) { |index| return index }
-    nil
-  end
-
-  def self.each(haystack, needle_string, starting_haystack_index = 0, &block)
-    enumerator = Enumerator.new(haystack, needle_string, starting_haystack_index)
-    if block
-      enumerator.each(&block)
-    else
-      enumerator.to_enum(:each)
     end
   end
 
