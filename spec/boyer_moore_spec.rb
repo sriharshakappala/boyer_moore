@@ -18,7 +18,7 @@ describe BoyerMoore do
     end
   end
 
-  it "should find properly" do
+  it "should implement find" do
     expect(BoyerMoore.find("ANPANMAN", "ANP")).to eq 0
     expect(BoyerMoore.find("ANPANMAN", "ANPXX")).to eq nil
     expect(BoyerMoore.find("ANPANMAN", "MAN")).to eq 5
@@ -26,7 +26,7 @@ describe BoyerMoore do
     expect(BoyerMoore.find("foobar", "zar")).to eq nil
   end
 
-  it "should implement each properly" do
+  it "should implement each" do
     yielded = []
     BoyerMoore.each("ANPANMAN", "AN") { |index| yielded << index }
     expect(yielded).to eq [0, 3, 6]
@@ -42,6 +42,22 @@ describe BoyerMoore do
     yielded = []
     BoyerMoore.each("foobar", "zar") { |index| yielded << index }
     expect(yielded).to eq []
+  end
+
+  it "should implement each with a starting index" do
+    yielded = []
+    BoyerMoore.each("ANPANMAN", "AN", 0) { |index| yielded << index }
+    expect(yielded).to eq [0, 3, 6]
+    yielded = []
+    BoyerMoore.each("ANPANMAN", "AN", 1) { |index| yielded << index }
+    expect(yielded).to eq [3, 6]
+  end
+
+  it "should return an enumerator from each with no block" do
+    yielded = []
+    enumerator = BoyerMoore.each("ANPANMAN", "AN")
+    enumerator.each.with_index { |match_index, index| yielded[index] = match_index }
+    expect(yielded).to eq [0, 3, 6]
   end
 
   it "should match ruby's #index for basic strings" do
